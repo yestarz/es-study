@@ -1,0 +1,47 @@
+###
+GET {{host}}/blog/_doc/1
+
+###条件查询：
+
+POST {{host}}/blog/_search
+Content-Type: application/json
+
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+###分页查询：
+
+POST {{host}}/blog/_search
+Content-Type: application/json
+
+{
+  "query": {
+    "match_all": {}
+  },
+  "from": 1,
+  "size": 10
+}
+
+###
+POST {{host}}/blog/_search
+Content-Type: application/json
+
+{
+  "query": {
+    "match": {
+      "title": "Springboot"
+    }
+  },
+  "sort": {
+    "update_time": {
+      "order": "desc"
+    }
+  }
+}
+
+###
+POST {{host}}/blog/_search
+Content-Type: application/json

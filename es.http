@@ -1,0 +1,69 @@
+# 查看所有索引
+GET {{host}}/_all
+
+###
+
+# 创建索引 test为索引名 PUT {{host}}/{{indexName}}
+
+PUT {{host}}/test
+
+###
+
+# 删除索引 DELETE {{host}}/{{indexName}}
+
+DELETE {{host}}/test
+
+###
+
+# 添加一个person索引
+
+
+PUT {{host}}/person
+
+###
+
+# 添加一条person数据：1
+
+PUT {{host}}/person/_doc/1
+Content-Type: application/json
+
+{
+  "first_name": "John",
+  "last_name": "Smith",
+  "age": 25,
+  "about": "I love to go rock climbing",
+  "interests": ["sports","music"]
+}
+
+###
+
+# 添加一条person数据：2
+
+PUT {{host}}/person/_doc/2
+Content-Type: application/json
+
+{
+  "first_name": "Eric",
+  "last_name": "Smith",
+  "age": 23,
+  "about": "I love basketball",
+  "interests": ["sports","reading"]
+}
+
+###
+
+# 根据id查询person：
+
+GET {{host}}/person/_doc/1
+
+###
+
+# 根据name查询person:
+
+GET {{host}}/person/_doc/_search?q=first_name:john
+
+###
+
+POST {{host}}/blog/_search
+
+###

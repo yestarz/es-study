@@ -1,0 +1,130 @@
+PUT {{host}}/book
+
+###
+
+GET {{slave}}/book
+
+###
+
+POST {{host}}/book/novel/_mappings
+Content-Type: application/json
+
+{
+  "novel": {
+    "properties": {
+      "title": {
+        "type": "text"
+      }
+    }
+  }
+}
+
+###
+
+PUT {{host}}/people
+Content-Type: application/json
+
+{
+  "settings": {
+    "number_of_shards": 3,
+    "number_of_replicas": 1
+  },
+  "mappings": {
+    "man": {
+      "properties": {
+        "name": {
+          "type": "text"
+        },
+        "country": {
+          "type": "keyword"
+        },
+        "age": {
+          "type": "integer"
+        },
+        "date": {
+          "type": "date",
+          "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
+        }
+      }
+    },
+    "woman": {
+
+    }
+  }
+}
+
+###
+
+GET {{host}}/people/man/1
+
+### 新增数据，指定id
+
+PUT {{host}}/people/man/1
+Content-Type: application/json
+
+{
+  "name": "yangxin",
+  "country": "China",
+  "age": 25,
+  "date": "1994-10-23"
+}
+
+###新增数据，不指定id，自动生成id，注意是post方法
+
+POST {{host}}/people/man
+Content-Type: application/json
+
+{
+  "name": "yangbaba 自动创建的id",
+  "country": "China",
+  "age": 25,
+  "date": "1994-10-23"
+}
+
+###修改数据(直接修改)
+POST {{host}}/people/man/1/_update
+Content-Type: application/json
+
+{
+ "doc": {
+   "name": "woshi baba"
+ }
+}
+
+###修改数据(脚本修改) 将id为1的年龄加10
+POST {{host}}/people/man/1/_update
+Content-Type: application/json
+
+{
+  "script": {
+   "lang": "painless",
+    "inline": "ctx._source.age +=10"
+  }
+}
+
+###修改数据(脚本修改) 将id为1的年龄加10（第二种方式）
+POST {{host}}/people/man/1/_update
+Content-Type: application/json
+
+{
+  "script": {
+    "lang": "painless",
+    "inline": "ctx._source.age += params.age",
+    "params": {
+      "age": 10
+    }
+  }
+}
+
+### 删除文档 删除id为1的记录
+
+DELETE {{host}}/people/man/1
+
+###
+
+### 删除people索引
+DELETE {{host}}/people
+
+###
+
+
